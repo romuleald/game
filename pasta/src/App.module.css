@@ -1,0 +1,24 @@
+.site {
+    display: flex;
+    height: 100vh;
+    background: burlywood;
+    flex-flow: column;
+}
+
+.header {
+    height: 80px;
+    display: flex;
+    background: azure;
+    flex-flow: row;
+}
+
+.headerLogo {
+
+}
+
+.game {
+    display: flex;
+    background: bisque;
+    flex: 1 0 auto;
+    position: relative;
+}
