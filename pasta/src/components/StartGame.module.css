@@ -1,0 +1,11 @@
+.startGameWrapper {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.startGameButton {
+    padding: 20px;
+    background: aquamarine;
+}

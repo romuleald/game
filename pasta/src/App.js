@@ -1,19 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
+import {Provider} from 'react-redux';
+
 import css from './App.module.css';
-import {Pasta} from './components/Pasta';
+import './App.css';
+import store from './redux/store';
+import {Header} from './components/Header';
+import {GameBoard} from './components/GameBoard';
+
 
 function App() {
     return (
-        <section className={css.site}>
-            <header className={css.header}>
-                <img src={logo} className={css.headerLogo} alt="logo"/>
-                <div>counter</div>
-            </header>
-            <section className={css.game}>
-                <Pasta></Pasta>
+        <Provider store={store}>
+            <section className={css.site}>
+                <Header/>
+                <GameBoard/>
             </section>
-        </section>
+        </Provider>
     );
 }
 

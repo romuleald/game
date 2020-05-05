@@ -1,0 +1,7 @@
+.game {
+    overflow: hidden;
+    display: flex;
+    background: bisque;
+    flex: 1 0 auto;
+    position: relative;
+}
