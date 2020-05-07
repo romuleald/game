@@ -12,7 +12,12 @@ const _StartButton = ({isStarted}: Props): JSX.Element | null => {
         <div className={css.startGameWrapper}>
             <button
                 className={css.startGameButton}
-                onTouchStart={() => dispatch(playGame())}>START
+                onTouchStart={(event) => {
+                    event.stopPropagation();
+                    dispatch(playGame())
+                }}
+                onClick={() => dispatch(playGame())}
+            >START
             </button>
         </div> : null
 };

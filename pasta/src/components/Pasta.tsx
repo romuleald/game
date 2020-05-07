@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {SyntheticEvent, useState} from 'react';
 import css from './Pasta.module.css';
-import {connect, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {addPoints} from "../redux/actions";
 
 type AnimationPositions = {
@@ -36,10 +36,18 @@ type Props = {
     pastaId: number;
 }
 
+
 export const Pasta = ({pastaId}: Props) => {
     const [pastaSrc, setPasta] = useState(pastaImg);
     const [isVisible, setIsVisible] = useState(true);
     const dispatch = useDispatch();
+
+    const onUserAction = (event: SyntheticEvent) => {
+        event.stopPropagation();
+        setPasta(pastaCrushedImg)
+        setTimeout(() => setIsVisible(false), 1000);
+        dispatch(addPoints(100));
+    };
 
     if (!document.getElementById(`style_pasta_${pastaId}`)) {
         injectAnimation({
@@ -51,14 +59,11 @@ export const Pasta = ({pastaId}: Props) => {
     }
     return (
         isVisible ? <div
-            onTouchStart={() => {
-                setPasta(pastaCrushedImg)
-                setIsVisible(false);
-                dispatch(addPoints(100));
-            }}
+            onClick={onUserAction}
+            onTouchStart={onUserAction}
             id={`pasta-${pastaId}`}
             onAnimationEnd={() => {
-                setIsVisible(false);
+                setTimeout(() => setIsVisible(false), 1000);
                 dispatch(addPoints(-50));
             }}
             className={css.pasta}
