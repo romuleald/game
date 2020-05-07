@@ -36,15 +36,16 @@ type Props = {
     pastaId: number;
 }
 
-
 export const Pasta = ({pastaId}: Props) => {
     const [pastaSrc, setPasta] = useState(pastaImg);
     const [isVisible, setIsVisible] = useState(true);
+    const [isRemoving, setIsRemoving] = useState(false);
     const dispatch = useDispatch();
 
     const onUserAction = (event: SyntheticEvent) => {
         event.stopPropagation();
-        setPasta(pastaCrushedImg)
+        setPasta(pastaCrushedImg);
+        setIsRemoving(true);
         setTimeout(() => setIsVisible(false), 1000);
         dispatch(addPoints(100));
     };
@@ -66,7 +67,7 @@ export const Pasta = ({pastaId}: Props) => {
                 setTimeout(() => setIsVisible(false), 1000);
                 dispatch(addPoints(-50));
             }}
-            className={css.pasta}
+            className={`${css.pasta} ${isRemoving ? css.pastaRemoving : ''}`}
             style={{animationName: `pasta${pastaId}`}}>
             <img
                 src={pastaSrc}
