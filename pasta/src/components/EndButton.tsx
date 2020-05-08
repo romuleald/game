@@ -6,7 +6,7 @@ import {getGameScore} from "../redux/actions";
 export const EndButton = () => {
     const gameScore = useSelector(getGameScore);
 
-    let uri = `Je viens de faire un score de ${gameScore} au jeu de pâtes http://pasta.asanchez.fr/`;
+    let uri = `Je viens de faire un score de ${gameScore} au jeu de pâtes http://pasta.asanchez.fr/ #jeudepates`;
     return <div className={css.startGameWrapper}>
             <a
                 target="_blank"
