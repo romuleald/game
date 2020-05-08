@@ -6,7 +6,7 @@
 }
 
 .logoWrapper {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
 }
 
 .headerLogo {
@@ -15,4 +15,14 @@
 
 .counter {
     flex: 1 1 auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    height: 100%;
+    display: flex;
+    background: darkkhaki;
 }

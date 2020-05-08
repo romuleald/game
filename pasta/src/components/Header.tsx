@@ -4,8 +4,9 @@ import React from "react";
 import {connect, useDispatch} from "react-redux";
 import {stopGame} from "../redux/actions";
 
+let domRoot = document.getElementById('root');
+
 const goFullScreen = () => {
-    let domRoot = document.getElementById('root');
     domRoot && domRoot.requestFullscreen();
 };
 
@@ -14,7 +15,9 @@ const _Header = ({currentScore, isPlaying}: { currentScore: number, isPlaying: b
     return <header className={css.header}>
         <span className={css.logoWrapper}><img src={logo} className={css.headerLogo} alt="logo"/></span>
         <div className={css.counter}>counter {currentScore}</div>
-        <button onClick={goFullScreen}>🖥</button>
+
+        <button className={css.button}>test</button>
+        {domRoot && domRoot.requestFullscreen && <button onClick={goFullScreen}>🖥</button>}
         {isPlaying && <button onClick={() => dispatch(stopGame())}>pause</button>}
     </header>
 };
