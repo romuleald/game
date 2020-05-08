@@ -15,3 +15,7 @@ export const game = (state = initialState, action: { type: string; }) => {
         }
     }
 };
+
+export const getGamePlayingState = (store: { game: true }) => {
+    return store.game;
+};

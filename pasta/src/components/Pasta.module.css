@@ -13,6 +13,10 @@
     z-index: initial;
 }
 
+.pastaPaused {
+    pointer-events: none;
+}
+
 .pasta img {
     vertical-align: middle;
     width: 100%;
