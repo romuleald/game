@@ -1,5 +1,4 @@
 import { ADD_POINTS, GET_POINTS } from "../actionTypes";
-import { SCORE } from "../constants";
 
 const initialState = 0;
 

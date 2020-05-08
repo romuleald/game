@@ -1,30 +1,20 @@
 import React from "react";
-import {connect, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {playGame} from "../redux/actions";
 import css from './StartGame.module.css';
 
 type Props = {
     isStarted: boolean;
 }
-const _StartButton = ({isStarted}: Props): JSX.Element | null => {
+export const StartButton = () => {
     const dispatch = useDispatch();
-    return !isStarted ?
-        <div className={css.startGameWrapper}>
-            <button
-                className={css.startGameButton}
-                onTouchStart={(event) => {
-                    event.stopPropagation();
-                    dispatch(playGame())
-                }}
-                onClick={() => dispatch(playGame())}
-            >START
-            </button>
-        </div> : null
+    return <button
+        className={css.startGameButton}
+        onTouchStart={(event) => {
+            event.stopPropagation();
+            dispatch(playGame())
+        }}
+        onClick={() => dispatch(playGame())}
+    >START
+    </button>
 };
-
-const mapStateToProps = (state: { game: boolean; }) => {
-    const {game} = state;
-    return {isStarted: game};
-};
-
-export const StartButton = connect(mapStateToProps)(_StartButton);

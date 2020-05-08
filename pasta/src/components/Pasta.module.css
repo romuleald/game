@@ -3,6 +3,7 @@
     height: 100px;
     position: absolute;
     animation: 20s linear 0s;
+    animation-fill-mode: forwards;
     z-index: 2;
     opacity: 1;
 }

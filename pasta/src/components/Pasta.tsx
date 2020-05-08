@@ -1,8 +1,7 @@
 import React, {SyntheticEvent, useState} from 'react';
 import css from './Pasta.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {addPoints} from "../redux/actions";
-import {getGamePlayingState} from "../redux/reducers/game";
+import {addPoints, delPastas, getGamePlayingState} from "../redux/actions";
 
 type AnimationPositions = {
     hStart: number;
@@ -50,6 +49,7 @@ export const Pasta = ({pastaId}: Props) => {
         setIsRemoving(true);
         setTimeout(() => setIsVisible(false), 1000);
         dispatch(addPoints(100));
+        dispatch(delPastas());
     };
 
     if (!document.getElementById(`style_pasta_${pastaId}`)) {
@@ -68,6 +68,7 @@ export const Pasta = ({pastaId}: Props) => {
             onAnimationEnd={() => {
                 setTimeout(() => setIsVisible(false), 1000);
                 dispatch(addPoints(-50));
+                dispatch(delPastas());
             }}
             className={`${css.pasta} ${isRemoving ? css.pastaRemoving : ''} ${!isGamePlaying ? css.pastaPaused : ''}`}
             style={{animationName: `pasta${pastaId}`, animationPlayState: isGamePlaying ? 'running' : 'paused'}}>
