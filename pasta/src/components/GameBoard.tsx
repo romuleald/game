@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import css from "./GameBoard.module.css";
 import {Pasta} from "./Pasta";
@@ -8,27 +8,29 @@ import {
 } from "../redux/actions";
 import {EndButton} from "./EndButton";
 import {PastaState} from "../type";
-import {VISIBLE_PASTA_STATE} from "../redux/constants";
+import {INITIAL_PASTA_STATE, VISIBLE_PASTA_STATE} from "../redux/constants";
 
 const getRefreshRandom = () => Math.random() * 2000 + 200;
 
 let timer: any;
+
+const getFirstInitialPasta = (pastaLists: PastaState) => pastaLists
+    .find(([pastaId, pastaState]) =>
+        pastaState === INITIAL_PASTA_STATE);
 
 export const GameBoard = () => {
     const isGameFinish = useSelector(getGameFinished)
     const isGamePlaying = useSelector(getGamePlayingState)
     const pastaList = useSelector(getPastas);
     const pastaLists: PastaState = Object.entries(pastaList);
+
     const dispatch = useDispatch();
-    // todo need to find the last pasta initial
-    const [lastPastaId, setLastPastaId] = useState(0);
 
     useEffect(() => {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            setLastPastaId(lastPastaId + 1);
-            console.info({pastaLists, lastPastaId});
-            isGamePlaying && dispatch(showPastas(pastaLists[lastPastaId][0]))
+            const pastaToShow = getFirstInitialPasta(pastaLists);
+            isGamePlaying && pastaToShow && dispatch(showPastas(pastaToShow[0]))
         }, getRefreshRandom());
     });
 

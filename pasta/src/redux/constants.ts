@@ -1,4 +1,4 @@
-export const MAX_PASTA = 10;
+export const MAX_PASTA = 100;
 export const INITIAL_PASTA_STATE = 0;
 export const VISIBLE_PASTA_STATE = 1;
 export const REMOVED_PASTA_STATE = 2;

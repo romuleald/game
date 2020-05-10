@@ -4,11 +4,14 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getGamePlayingState, getGameScore, getPastasCount, stopGame} from "../redux/actions";
 import {MAX_PASTA} from "../redux/constants";
+import screenfull from "screenfull";
 
 let domRoot = document.getElementById('root');
 
 const goFullScreen = () => {
-    domRoot && domRoot.requestFullscreen();
+    if (domRoot && screenfull.isEnabled) {
+        screenfull.toggle(domRoot);
+    }
 };
 
 export const Header = () => {
@@ -22,7 +25,7 @@ export const Header = () => {
         <div className={css.counter}>counter {currentScore}</div>
         <div className={css.counter}>pastas: {MAX_PASTA - pastasCount}</div>
 
-        {domRoot && domRoot.requestFullscreen && <button onClick={goFullScreen}>🖥</button>}
+        {domRoot && screenfull.isEnabled && <button onClick={goFullScreen}>🖥</button>}
         {isPlaying && <button onClick={() => dispatch(stopGame())}>pause</button>}
     </header>
 };

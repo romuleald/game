@@ -13,7 +13,7 @@ type AnimationPositions = {
 };
 
 const getRandomPos = () => {
-    return (Math.random() * 110) - 10;
+    return (Math.random() * 105) - 5;
 };
 
 const getStartPosition = () => getRandomPos();

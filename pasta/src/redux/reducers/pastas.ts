@@ -1,6 +1,8 @@
 import {SHOW_PASTAS, HIDE_PASTAS} from "../actionTypes";
 import {PastaId} from "../../type";
-import {INITIAL_PASTA_STATE, MAX_PASTA, REMOVED_PASTA_STATE, VISIBLE_PASTA_STATE} from "../constants";
+import {
+    INITIAL_PASTA_STATE, MAX_PASTA, REMOVED_PASTA_STATE, VISIBLE_PASTA_STATE
+} from "../constants";
 
 const END = MAX_PASTA;
 const START = 0;
