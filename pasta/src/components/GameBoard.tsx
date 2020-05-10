@@ -1,70 +1,47 @@
-import React, {useEffect, useState} from "react";
-import {connect, useSelector} from "react-redux";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import css from "./GameBoard.module.css";
 import {Pasta} from "./Pasta";
 import {StartButton} from "./StartButton";
-import {addPastas, getGameFinished, getGamePlayingState} from "../redux/actions";
-import store from '../redux/store';
+import {
+    getGameFinished, getGamePlayingState, getPastas, showPastas
+} from "../redux/actions";
 import {EndButton} from "./EndButton";
+import {PastaState} from "../type";
+import {INITIAL_PASTA_STATE, VISIBLE_PASTA_STATE} from "../redux/constants";
 
-const list: number[] = [];
-
-const getRefreshRandom = () => Math.random() * 3000 + 500;
-
-const startGame = (maxPasta = 100) => {
-    let isPlaying = false;
-    const play = () => {
-        isPlaying = true;
-    }
-    const pause = () => {
-        isPlaying = false;
-    }
-
-    for (let i = 0; i < maxPasta; i++) {
-        store.dispatch(addPastas())
-    }
-
-    const loop = () => {
-        if (maxPasta > list.length) {
-            isPlaying && list.push(list.length);
-            setTimeout(loop, 1000);
-        }
-    };
-    loop();
-    return {
-        start: play,
-        pause: pause
-    }
-};
+const getRefreshRandom = () => Math.random() * 2000 + 200;
 
 let timer: any;
 
-const gameInstance = startGame(100);
+const getFirstInitialPasta = (pastaLists: PastaState) => pastaLists
+    .find(([pastaId, pastaState]) =>
+        pastaState === INITIAL_PASTA_STATE);
 
-const _GameBoard = () => {
-    const [, setReRender] = useState(0);
+export const GameBoard = () => {
     const isGameFinish = useSelector(getGameFinished)
     const isGamePlaying = useSelector(getGamePlayingState)
+    const pastaList = useSelector(getPastas);
+    const pastaLists: PastaState = Object.entries(pastaList);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         clearTimeout(timer);
-        timer = setTimeout(() => setReRender(Date.now()), getRefreshRandom());
+        timer = setTimeout(() => {
+            const pastaToShow = getFirstInitialPasta(pastaLists);
+            isGamePlaying && pastaToShow && dispatch(showPastas(pastaToShow[0]))
+        }, getRefreshRandom());
     });
+
 
     return <section className={css.game}>
         <div className={css.startGameWrapper}>
-            {!isGamePlaying && <StartButton />}
-            {isGameFinish && <EndButton />}
+            {!isGamePlaying && <StartButton/>}
+            {isGameFinish && <EndButton/>}
         </div>
-        {list.map((item) => <Pasta key={item} pastaId={item}/>)}
+        {pastaLists.map(([key, pastaState]) => {
+            return pastaState === VISIBLE_PASTA_STATE && <Pasta key={key} pastaId={key}/>
+        })}
     </section>
 };
-
-// very dirty 👇
-const mapStateToProps = (state: { game: boolean; }) => {
-    const {game} = state;
-    game ? gameInstance.start() : gameInstance.pause();
-    return {};
-};
-
-export const GameBoard = connect(mapStateToProps)(_GameBoard);

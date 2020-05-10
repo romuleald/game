@@ -1,7 +1,9 @@
 import React, {SyntheticEvent, useState} from 'react';
 import css from './Pasta.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {addPoints, delPastas, getGamePlayingState} from "../redux/actions";
+import {addPoints, getGamePlayingState, hidePastas} from "../redux/actions";
+import {PastaId} from "../type";
+import {LOSE_POINT, WIN_POINT} from "../redux/constants";
 
 type AnimationPositions = {
     hStart: number;
@@ -11,14 +13,14 @@ type AnimationPositions = {
 };
 
 const getRandomPos = () => {
-    return (Math.random() * 110) - 10;
+    return (Math.random() * 105) - 5;
 };
 
 const getStartPosition = () => getRandomPos();
 
 const getEndPosition = () => getRandomPos();
 
-const injectAnimation = (pos: AnimationPositions, pastaId: number) => {
+const injectAnimation = (pos: AnimationPositions, pastaId: PastaId) => {
     document.head.insertAdjacentHTML('beforeend', `
         <style id="style_pasta_${pastaId}">
             @keyframes pasta${pastaId} { 
@@ -33,12 +35,11 @@ const pastaImg = 'http://2.bp.blogspot.com/-KdqQ59OZ6b4/U7DdEh5iiHI/AAAAAAAAKSM/
 const pastaCrushedImg = 'http://4.bp.blogspot.com/-4Y-0SxTBlrI/T2KZrQwyleI/AAAAAAAAG1c/RTChXtRDXJE/s1600/IMG_2885.JPG';
 
 type Props = {
-    pastaId: number;
+    pastaId: PastaId;
 }
 
 export const Pasta = ({pastaId}: Props) => {
     const [pastaSrc, setPasta] = useState(pastaImg);
-    const [isVisible, setIsVisible] = useState(true);
     const [isRemoving, setIsRemoving] = useState(false);
     const dispatch = useDispatch();
     const isGamePlaying = useSelector(getGamePlayingState);
@@ -47,9 +48,8 @@ export const Pasta = ({pastaId}: Props) => {
         event.stopPropagation();
         setPasta(pastaCrushedImg);
         setIsRemoving(true);
-        setTimeout(() => setIsVisible(false), 1000);
-        dispatch(addPoints(100));
-        dispatch(delPastas());
+        setTimeout(() => dispatch(hidePastas(pastaId)), 1000);
+        dispatch(addPoints(WIN_POINT));
     };
 
     if (!document.getElementById(`style_pasta_${pastaId}`)) {
@@ -61,20 +61,19 @@ export const Pasta = ({pastaId}: Props) => {
         }, pastaId);
     }
     return (
-        isVisible ? <div
+        <div
             onClick={onUserAction}
             onTouchStart={onUserAction}
             id={`pasta-${pastaId}`}
             onAnimationEnd={() => {
-                setTimeout(() => setIsVisible(false), 1000);
-                dispatch(addPoints(-50));
-                dispatch(delPastas());
+                setTimeout(() => dispatch(hidePastas(pastaId)), 1000);
+                dispatch(addPoints(LOSE_POINT));
             }}
             className={`${css.pasta} ${isRemoving ? css.pastaRemoving : ''} ${!isGamePlaying ? css.pastaPaused : ''}`}
             style={{animationName: `pasta${pastaId}`, animationPlayState: isGamePlaying ? 'running' : 'paused'}}>
             <img
                 src={pastaSrc}
                 alt="pate"/>
-        </div> : null
+        </div>
     );
 };
