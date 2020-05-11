@@ -5,6 +5,35 @@ import {addPoints, getGamePlayingState, hidePastas} from "../redux/actions";
 import {PastaId} from "../type";
 import {LOSE_POINT, WIN_POINT} from "../redux/constants";
 
+// @ts-ignore
+import Tone from 'tone';
+const winTone = new Tone.Synth().toMaster();
+const lostTone = new Tone.Synth({
+    "oscillator": {
+        "type": "pwm",
+        "modulationFrequency": 100
+    },
+    "envelope": {
+        "attack": 0.01,
+        "decay": 10.1,
+        "sustain": 0.2,
+        "release": 2.2,
+    }
+}).toMaster();
+
+//play a middle 'C' for the duration of an 8th note
+const notes = ['A', 'B', 'C', 'D', 'E', 'F']
+
+const playWin = () => {
+    let number = Math.round(Math.random() * 5);
+    let note = notes[number] || 'A';
+    winTone.triggerAttackRelease(note + "4", "8n");
+};
+
+const playLost = () => {
+    lostTone.triggerAttackRelease("F2", ".2");
+};
+
 type AnimationPositions = {
     hStart: number;
     hEnd: number;
@@ -45,6 +74,7 @@ export const Pasta = ({pastaId}: Props) => {
     const isGamePlaying = useSelector(getGamePlayingState);
 
     const onUserAction = (event: SyntheticEvent) => {
+        playWin();
         event.stopPropagation();
         setPasta(pastaCrushedImg);
         setIsRemoving(true);
@@ -68,12 +98,13 @@ export const Pasta = ({pastaId}: Props) => {
             onAnimationEnd={() => {
                 setTimeout(() => dispatch(hidePastas(pastaId)), 1000);
                 dispatch(addPoints(LOSE_POINT));
+                playLost();
             }}
             className={`${css.pasta} ${isRemoving ? css.pastaRemoving : ''} ${!isGamePlaying ? css.pastaPaused : ''}`}
             style={{animationName: `pasta${pastaId}`, animationPlayState: isGamePlaying ? 'running' : 'paused'}}>
             <img
                 src={pastaSrc}
-                alt="pate"/>
+                alt="pate à cliquer"/>
         </div>
     );
 };
